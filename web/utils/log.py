@@ -12,8 +12,10 @@ __author__ = 'Rocky Peng'
 
 import logging
 import platform
+
 if platform.system() == 'Windows':
     from ctypes import windll, c_ulong
+
 
     def color_text_decorator(function):
         def real_func(self, string):
@@ -31,6 +33,7 @@ if platform.system() == 'Windows':
                 windll.Kernel32.SetConsoleTextAttribute(h, 15)
             function(self, string)
             windll.Kernel32.SetConsoleTextAttribute(h, 15)
+
         return real_func
 else:
     def color_text_decorator(function):
@@ -47,6 +50,7 @@ else:
                 self.stream.write('\033[0;37;40m')
             function(self, string)
             self.stream.write('\033[0m')
+
         return real_func
 
 
@@ -58,6 +62,7 @@ def singleton(cls, *args, **kw):
             instances[cls] = cls(*args, **kw)
         instances[cls].__init__(*args, **kw)
         return instances[cls]
+
     return _singleton
 
 
@@ -68,7 +73,6 @@ class Logger(object):
     DEBUG_MODE = False
     GLOBAL_FILENAME = 'default.log'
 
-
     def __init__(self, name, filename=None):
         self.logger = logging.getLogger(name)
         if len(self.logger.handlers):
@@ -78,7 +82,7 @@ class Logger(object):
 
         sh = logging.StreamHandler()
         sh.setFormatter(formatter)
-        #sh.setLevel(logging.DEBUG)
+        # sh.setLevel(logging.DEBUG)
         sh.setLevel(logging.DEBUG if self.DEBUG_MODE else logging.INFO)
         self.logger.addHandler(sh)
         self.stream = sh.stream
@@ -111,18 +115,27 @@ class Logger(object):
     def error(self, string):
         return self.logger.error(string)
 
+
 if __name__ == '__main__':
     Logger.DEBUG_MODE = True
+
+
     class A:
         def __init__(self):
             self.logger = Logger(self.__class__.__name__)
+
         def log(self, msg):
             self.logger.debug(msg)
+
+
     class B:
         def __init__(self):
             self.logger = Logger(self.__class__.__name__)
+
         def log(self, msg):
             self.logger.debug(msg)
+
+
     a = A()
     b = B()
     a.log("1111111111111111111111")

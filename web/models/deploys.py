@@ -19,7 +19,7 @@ class Deploys(JsonSerializer, db.Model):
     softln_filename = db.Column(db.String(64))
     comment = db.Column(db.Text, default="")
     created_at = db.Column(db.DateTime, default=db.func.now())
-    updated_at= db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+    updated_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
 
     user = db.relationship("Users", backref=db.backref("deploys", lazy="dynamic"))
     project = db.relationship("Projects", backref=db.backref("deploys", lazy="dynamic"))

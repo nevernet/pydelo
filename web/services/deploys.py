@@ -41,14 +41,16 @@ class DeploysService(Base):
 
     def append_comment(self, deploy, comment):
         sql = ("UPDATE {table} SET comment = CONCAT(comment, :comment) where id = {id}").format(
-                table=self.__model__.__tablename__,
-                #comment=comment,
-                id=deploy.id
-                )
+            table=self.__model__.__tablename__,
+            # comment=comment,
+            id=deploy.id
+        )
         db.session.execute(sql, {"comment": comment})
         db.session.commit()
 
+
 deploys = DeploysService()
+
 
 def rollback_thread(service, deploy):
     ssh = RemoteShell(host=deploy.host.ssh_host,
@@ -69,7 +71,7 @@ def rollback_thread(service, deploy):
         service.update(deploy, progress=33)
         # rollback
         logger.debug("rollback:")
-        rc,stdout, stderr = ssh.exec_command("ln -snf {0} {1}".format(
+        rc, stdout, stderr = ssh.exec_command("ln -snf {0} {1}".format(
             os.path.join(deploy.project.deploy_history_dir, deploy.softln_filename), deploy.project.deploy_dir))
         if rc:
             raise Error(11001)
@@ -91,6 +93,7 @@ def rollback_thread(service, deploy):
     finally:
         ssh.close()
 
+
 def deploy_thread(service, deploy):
     ssh = RemoteShell(host=deploy.host.ssh_host,
                       port=deploy.host.ssh_port,
@@ -101,11 +104,11 @@ def deploy_thread(service, deploy):
         # before checkout
         git = Git(deploy.project.checkout_dir, deploy.project.repo_url)
         before_checkout = deploy.project.before_checkout.replace("\r", "").replace("\n", " && ")
-        logger.debug("before_checkout"+before_checkout)
+        logger.debug("before_checkout" + before_checkout)
         service.append_comment(deploy, "before checkout:\n")
         if before_checkout:
             cmd = "WORKSPACE='{0}' && mkdir -p $WORKSPACE && cd $WORKSPACE && {1}".format(
-                    deploy.project.checkout_dir, before_checkout)
+                deploy.project.checkout_dir, before_checkout)
             LocalShell.check_call(cmd, shell=True)
         service.append_comment(deploy, "OK!\n")
         service.update(deploy, progress=17)
@@ -123,7 +126,7 @@ def deploy_thread(service, deploy):
         service.append_comment(deploy, "after checkout:\n")
         if after_checkout:
             cmd = "WORKSPACE='{0}' && cd $WORKSPACE && {1}".format(
-                    deploy.project.checkout_dir, after_checkout)
+                deploy.project.checkout_dir, after_checkout)
             LocalShell.check_call(cmd, shell=True)
         service.append_comment(deploy, "OK!\n")
         service.update(deploy, progress=50)
@@ -148,7 +151,8 @@ def deploy_thread(service, deploy):
         service.append_comment(deploy, "deploy:\n")
         logger.debug("deploy:")
         logger.debug("rsync:")
-        cmd = ("rsync -avzq --rsh=\"sshpass -p {ssh_pass} ssh -p {ssh_port}\" --exclude='.git' {local_dest}/ {ssh_user}@{ssh_host}:{remote_dest}/").format(
+        cmd = (
+        "rsync -avzq --rsh=\"sshpass -p {ssh_pass} ssh -p {ssh_port}\" --exclude='.git' {local_dest}/ {ssh_user}@{ssh_host}:{remote_dest}/").format(
             local_dest=deploy.project.checkout_dir,
             remote_dest=os.path.join(deploy.project.deploy_history_dir, deploy.softln_filename),
             ssh_user=deploy.host.ssh_user,
@@ -172,18 +176,20 @@ def deploy_thread(service, deploy):
         service.append_comment(deploy, "OK!\n")
     except Exception as err:
         logger.error(err)
-        service.append_comment(deploy, "Command: "+err.cmd+"\nReturn code: "+str(err.returncode)+"\nOutput: "+err.output)
+        service.append_comment(deploy, "Command: " + err.cmd + "\nReturn code: " + str(
+            err.returncode) + "\nOutput: " + err.output)
         service.update(deploy, status=0)
     else:
         service.update(deploy, progress=100, status=1)
     finally:
         ssh.close()
 
+
 def build_thread(deploy):
     # before checkout
     git = Git(deploy.project.checkout_dir, deploy.project.repo_url)
     before_checkout = deploy.project.before_checkout.replace("\r", "").replace("\n", " && ")
-    logger.debug("before_checkout"+before_checkout)
+    logger.debug("before_checkout" + before_checkout)
     if before_checkout:
         LocalShell.check_call(
             "WORKSPACE='{0}' && mkdir -p $WORKSPACE && cd $WORKSPACE && {1}".format(

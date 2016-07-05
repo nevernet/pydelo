@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 import time
 from web.utils.log import Logger
+
 logger = Logger("WEBHOOK")
 
 from web import app
@@ -11,6 +12,7 @@ from web.services.projects import projects
 from .login import authorize
 
 from flask import request, jsonify, g
+
 
 # 添加git的webhook像这样：http://10.169.123.172:9998/api/webhooks/push_events?apikey=FWi14sULr0CwdYqhyBwQfbpdSEV7M8dp&project_id=9&host_id=1
 @app.route('/api/webhooks/push_events', methods=["POST"])
@@ -32,11 +34,12 @@ def webhooks_push_events():
             branch=branch,
             version=version,
             softln_filename=time.strftime("%Y%m%d-%H%M%S") + "-" + version,
-            )
+        )
         deploys.deploy(deploy)
         return jsonify({"rc": 0}), 200
     else:
         return jsonify({"rc": 0}), 204
+
 
 @app.route('/api/webhooks/build_events', methods=["POST"])
 @authorize
@@ -57,7 +60,7 @@ def webhooks_build_events():
             branch=branch,
             version=version,
             softln_filename=time.strftime("%Y%m%d-%H%M%S") + "-" + version,
-            )
+        )
         deploys.build(deploy)
         return jsonify({"rc": 0}), 200
     else:

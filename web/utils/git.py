@@ -10,7 +10,6 @@ logger = Logger("GIT")
 
 
 class Git(object):
-
     def __init__(self, dest, url):
         self.dest = dest
         self.url = url
@@ -53,7 +52,9 @@ class Git(object):
         rc = LocalShell.call(shell, shell=True)
         # destination path '.' already exists and is not an empty directory.
         if rc == 128:
-            shell = ("cd {0} && git clean -xdfq && git reset -q --hard && git remote update && git checkout -q master && git remote prune origin && git pull -q --all && git branch | grep -v \\* | xargs git branch -D").format(self.dest)
+            shell = (
+            "cd {0} && git clean -xdfq && git reset -q --hard && git remote update && git checkout -q master && git remote prune origin && git pull -q --all && git branch | grep -v \\* | xargs git branch -D").format(
+                self.dest)
             rc = LocalShell.call(shell, shell=True)
             # branch name required
             if rc == 123:
@@ -73,9 +74,9 @@ class Git(object):
             LocalShell.check_call(
                 "cd {0} && git checkout {1} && git pull -q origin {1} && git reset --hard {2}".format(
                     self.dest, branch, version),
-                    shell=True)
+                shell=True)
         else:
             LocalShell.check_call(
                 "cd {0} && git checkout -b {1} -t origin/{1} && git pull -q origin {1} && git reset --hard {2}".format(
                     self.dest, branch, version),
-                    shell=True)
+                shell=True)

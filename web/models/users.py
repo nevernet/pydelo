@@ -19,4 +19,4 @@ class Users(JsonSerializer, db.Model):
     phone = db.Column(db.String(16))
     apikey = db.Column(db.String(64))
     created_at = db.Column(db.DateTime, default=db.func.now())
-    updated_at= db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+    updated_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())

@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 __author__ = 'Rocky Peng'
 
+
 class Error(Exception):
     MAPS = {
         10000: "income parameters error",
@@ -19,7 +20,7 @@ class Error(Exception):
         # 用户部分
         13000: "username or password incorrect",
         13001: "user not exists",
-        }
+    }
 
     def __init__(self, rc, msg=None):
         self.rc = rc

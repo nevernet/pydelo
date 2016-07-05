@@ -32,4 +32,5 @@ class ProjectsService(Base):
         git.checkout_branch(branch)
         return git.log()
 
+
 projects = ProjectsService()
