@@ -185,6 +185,7 @@ def api_project_tags(id):
 @app.route("/api/projects/<int:id>/branches/<branch>/commits", methods=["GET"])
 @authorize
 def api_project_branch_commits(id, branch):
+    logger.debug("get branch commits:{0}, branch:{1}".format(id, branch))
     project = projects.get(id)
     projects.git_clone(project)
     return jsonify(dict(rc=0, data=projects.git_branch_commit_log(project, branch)))
