@@ -22,10 +22,12 @@ class DeploysService(Base):
     __model__ = Deploys
 
     def deploy(self, deploy):
-        t = threading.Thread(target=deploy_thread, args=(self, deploy), name="pydelo-deploy[%d]" % deploy.id)
+        # t = threading.Thread(target=deploy_thread, args=(self, deploy), name="pydelo-deploy[%d]" % deploy.id)
         # TODO 当我不使用下面的语句时，project和host貌似在线程里面会没有值，也许我要把lazy值设置成select或者其他
-        a = deploy.project, deploy.host
-        t.start()
+        # a = deploy.project, deploy.host
+        # t.start()
+        deploy_thread(self, deploy)
+        pass
 
     def rollback(self, deploy):
         t = threading.Thread(target=rollback_thread, args=(self, deploy), name="pydelo-deploy[%d]" % deploy.id)
