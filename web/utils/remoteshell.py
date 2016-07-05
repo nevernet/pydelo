@@ -50,6 +50,7 @@ class RemoteShell(object):
         return exit_status, stdout, stderr
 
     def check_call(self, shell):
+        logger.debug("check_call remote shell: %s" % shell)
         rc, stdout, stderr = self.exec_command(shell)
         if rc:
             raise CalledProcessError(rc, shell, stdout + "\n" + stderr)

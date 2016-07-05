@@ -152,7 +152,7 @@ def deploy_thread(service, deploy):
         logger.debug("deploy:")
         logger.debug("rsync:")
         cmd = (
-        "rsync -avzq --rsh=\"sshpass -p {ssh_pass} ssh -p {ssh_port}\" --exclude='.git' {local_dest}/ {ssh_user}@{ssh_host}:{remote_dest}/").format(
+            "rsync -avzq --rsh=\"sshpass -p {ssh_pass} ssh -p {ssh_port}\" --exclude='.git' {local_dest}/ {ssh_user}@{ssh_host}:{remote_dest}/").format(
             local_dest=deploy.project.checkout_dir,
             remote_dest=os.path.join(deploy.project.deploy_history_dir, deploy.softln_filename),
             ssh_user=deploy.host.ssh_user,
