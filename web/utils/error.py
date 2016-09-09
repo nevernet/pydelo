@@ -3,7 +3,7 @@ __author__ = 'Rocky Peng'
 
 
 class Error(Exception):
-    MAPS = {
+    Maps = {
         10000: "income parameters error",
         10001: "project not exists.",
         10002: "host not exists.",
@@ -25,7 +25,7 @@ class Error(Exception):
     def __init__(self, rc, msg=None):
         self.rc = rc
         if msg is None:
-            self.msg = self.MAPS[rc]
+            self.msg = self.Maps[rc]
         else:
             self.msg = msg
 
