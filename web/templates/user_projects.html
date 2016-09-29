@@ -3,31 +3,37 @@
     <script src="{{ url_for('static', filename='js/pydelo/user_projects.js') }}"></script>
 {% endblock %}
 {% block content %}
-<div class="row">
-    <ol class="breadcrumb">
-        <li><a href="/projects">Home</a></li>
-        <li class="active">projects</li>
-    </ol>
-</div>
-<div class="row">
-    <!--form role="form" action="/host/creation" method="post"-->
-        <div class="row">
-            <div class="col-xs-2">
-                <select id="projects" multiple="multiple">
-                </select>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-left">
+                <h3 class="panel-title" style="line-height: 30px;">用户项目配置</h3>
             </div>
-        </div>
-        <div class="row">
-            <button id="add_projects" class="btn">+</button>
-            <button id="remove_projects" class="btn">-</button>
-        </div>
-        <div class="row">
-            <div class="col-xs-2">
-                <select id="projects_selected" multiple="multiple">
-                </select>
+            <div class="pull-right">
             </div>
+            <div class="clearfix"></div>
         </div>
-        <button id="submit" class="btn btn-primary">Save</button>
-    </form>
-</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-2">
+                    <label class="label label-primary">可选项目</label>
+                    <p></p>
+                    <select id="projects" multiple="multiple" class="col-lg-12"></select>
+                </div>
+                <div class="col-lg-2">
+                    <button id="add_projects" class="btn">+</button>
+                    <button id="remove_projects" class="btn">-</button>
+                </div>
+                <div class="col-lg-2">
+                    <label class="label label-primary">已选项目</label>
+                    <p></p>
+                    <select id="projects_selected" multiple="multiple" class="col-lg-12"></select>
+                </div>
+            </div>
+
+        </div>
+        <div class="panel-footer">
+            <button id="submit" class="btn btn-primary">保存</button>
+        </div>
+    </div>
 {% endblock %}

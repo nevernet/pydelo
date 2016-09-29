@@ -3,7 +3,6 @@
 __author__ = 'Rocky Peng'
 
 from subprocess import Popen, PIPE, CalledProcessError
-
 from web.utils.log import Logger
 
 logger = Logger("LocalShell")

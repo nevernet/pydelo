@@ -3,34 +3,37 @@
     <script src="{{ url_for('static', filename='js/pydelo/deploys.js') }}"></script>
 {% endblock %}
 {% block content %}
-<div class="row">
-    <ol class="breadcrumb">
-        <li><a href="/deploys">Home</a></li>
-    </ol>
-</div>
-<div class="row">
-    <a class="btn btn-primary btn-sm" href="/deploy/create">New deploy</a>
-</div>
-<div class="row">
-    <table class="table table-bordered">
-        <!--caption>Deploys</caption-->
-        <thead>
-            <tr>
-                <th>user</th>
-                <th>project</th>
-                <th>branch</th>
-                <th>version</th>
-                <th>status</th>
-                <th>time</th>
-                <th>action</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-</div>
-<div class="row">
-    <ul class="pagination">
-    </ul>
-</div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-left">
+                <h3 class="panel-title" style="line-height: 30px;">发布列表</h3>
+            </div>
+            <div class="pull-right">
+                <a class="btn btn-primary btn-sm" href="/deploy/create">创建发布</a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body">
+            <table class="table table-bordered">
+                <!--caption>Deploys</caption-->
+                <thead>
+                <tr>
+                    <th>user</th>
+                    <th>project</th>
+                    <th>branch</th>
+                    <th>version</th>
+                    <th>status</th>
+                    <th>time</th>
+                    <th>action</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="panel-footer">
+            <ul class="pagination">
+            </ul>
+        </div>
+    </div>
 {% endblock %}
