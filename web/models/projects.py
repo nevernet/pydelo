@@ -19,6 +19,7 @@ class Projects(JsonSerializer, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
+    prefix = db.Column(db.String(50))
     repo_url = db.Column(db.String(200))
     checkout_dir = db.Column(db.String(200))
     deploy_dir = db.Column(db.String(200))

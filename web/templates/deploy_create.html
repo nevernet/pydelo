@@ -17,56 +17,63 @@
 
             <div class="form-horizontal">
                 <div class="form-group">
-                    <label for="projects" class="col-lg-2">project</label>
+                    <label for="projects" class="col-lg-2">项目</label>
                     <div class="col-lg-10">
                         <select class="form-control" id="projects" name="project_id"></select>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="" class="col-lg-2">deploy mode</label>
+                    <label for="projects" class="col-lg-2">更新包</label>
                     <div class="col-lg-10">
-                        <div class="radio-inline">
-                            <input type="radio" name="deploy_mode" value="0" checked>Branch</input>
-                        </div>
-                        <div class="radio-inline">
-                            <input type="radio" name="deploy_mode" value="1">Tag</input>
-                        </div>
+                        <input class="form-control" type="file"/>
                     </div>
                 </div>
 
-                <div class="form-group deploy_branch_mode">
-                    <label for="" class="col-lg-2">repo branch</label>
-                    <div class="col-lg-10">
-                        <select class="form-control" name="branch" id="branches"></select>
-                    </div>
-                </div>
-
-                <div class="form-group deploy_branch_mode">
-                    <label for="" class="col-lg-2">repo commits</label>
-                    <div class="col-lg-10">
-                        <select class="form-control" name="commit" id="commits"></select>
-                    </div>
-                </div>
-
-                <div class="form-group deploy_tag_mode">
-                    <label for="" class="col-lg-2">repo tags</label>
-                    <div class="col-lg-10">
-                        <select class="form-control" name="tag" id="tags"></select>
-                    </div>
-                </div>
-
-                <div class="form-group deploy_tag_mode">
-                    <label for="" class="col-lg-2">host</label>
-                    <div class="col-lg-10">
-                        <select class="form-control" name="host_id" id="hosts"></select>
-                    </div>
-                </div>
+                {#                <div class="form-group">#}
+                {#                    <label for="" class="col-lg-2">deploy mode</label>#}
+                {#                    <div class="col-lg-10">#}
+                {#                        <div class="radio-inline">#}
+                {#                            <input type="radio" name="deploy_mode" value="0" checked>Branch</input>#}
+                {#                        </div>#}
+                {#                        <div class="radio-inline">#}
+                {#                            <input type="radio" name="deploy_mode" value="1">Tag</input>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                </div>#}
+                {##}
+                {#                <div class="form-group deploy_branch_mode">#}
+                {#                    <label for="" class="col-lg-2">repo branch</label>#}
+                {#                    <div class="col-lg-10">#}
+                {#                        <select class="form-control" name="branch" id="branches"></select>#}
+                {#                    </div>#}
+                {#                </div>#}
+                {##}
+                {#                <div class="form-group deploy_branch_mode">#}
+                {#                    <label for="" class="col-lg-2">repo commits</label>#}
+                {#                    <div class="col-lg-10">#}
+                {#                        <select class="form-control" name="commit" id="commits"></select>#}
+                {#                    </div>#}
+                {#                </div>#}
+                {##}
+                {#                <div class="form-group deploy_tag_mode">#}
+                {#                    <label for="" class="col-lg-2">repo tags</label>#}
+                {#                    <div class="col-lg-10">#}
+                {#                        <select class="form-control" name="tag" id="tags"></select>#}
+                {#                    </div>#}
+                {#                </div>#}
+                {##}
+                {#                <div class="form-group deploy_tag_mode">#}
+                {#                    <label for="" class="col-lg-2">host</label>#}
+                {#                    <div class="col-lg-10">#}
+                {#                        <select class="form-control" name="host_id" id="hosts"></select>#}
+                {#                    </div>#}
+                {#                </div>#}
 
             </div>
         </div>
         <div class="panel-footer">
-            <button id="submit" class="btn btn-primary">保存</button>
+            <button id="submit" class="btn btn-primary">上传</button>
         </div>
     </div>
 {% endblock %}
