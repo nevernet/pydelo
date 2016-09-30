@@ -128,6 +128,11 @@ if __name__ == "__main__":
     msg = cp("-R", os.path.abspath(project_dir), target_directory)
     # print msg
 
+    cd = sh.Command("cd")
+    cd(target_directory)
+    pwd = sh.Command("pwd")
+    print pwd()
+
     git = sh.Command("git")
     print git("add", ".")
     print git("commit", "-am", "update")
