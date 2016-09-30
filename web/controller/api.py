@@ -24,6 +24,7 @@ from web import app
 from web.services.users import users
 from web.services.hosts import hosts
 from web.services.deploys import deploys
+from web.services.deploys_new import deploys_new
 from web.services.projects import projects
 from web.utils.error import Error
 from .login import authorize
@@ -81,7 +82,7 @@ def api_post_deploy():
 
     savePath = "%s/uploads/%s/%s" % (os.getcwd(), datetime.datetime.today().strftime('%Y/%m/%d'), project_id)
     if os.path.exists(savePath) is False:
-        os.makedirs(savePath, 755)
+        os.makedirs(savePath, 0755)
 
     file = request.files["package"]
     """ :type: werkzeug.datastructures.FileStorage"""
@@ -90,6 +91,10 @@ def api_post_deploy():
 
     secureFilename = secure_filename(file.filename)
     saveFile = os.path.join(savePath, secureFilename)
+
+    if secureFilename[-4:] != ".zip":
+        return jsonify(dict(rc=-1, msg="文件类型必须为.zip"))
+
     file.save(saveFile)
 
     host_id = request.args.get("host_id")
@@ -138,20 +143,25 @@ def update_deploy_by_id(id):
         deploys.deploy(new_deploy)
         return jsonify(dict(rc=0, data=dict(id=new_deploy.id)))
     elif action == "rollback":
-        new_deploy = deploys.create(
-            user_id=deploy.user_id,
-            project_id=deploy.project_id,
-            host_id=deploy.host_id,
-            mode=2,
-            status=2,
-            branch=deploy.branch,
-            version=deploy.version,
-            softln_filename=deploy.softln_filename)
-        deploys.rollback(new_deploy)
-        return jsonify(dict(rc=0, data=dict(id=new_deploy.id)))
-    elif action == "publish":
+        # new_deploy = deploys.create(
+        #     user_id=deploy.user_id,
+        #     project_id=deploy.project_id,
+        #     host_id=deploy.host_id,
+        #     mode=2,
+        #     status=2,
+        #     branch=deploy.branch,
+        #     version=deploy.version,
+        #     softln_filename=deploy.softln_filename)
+        # deploys.rollback(new_deploy)
 
-        return jsonify(dict(rc=0, data=None))
+        # return jsonify(dict(rc=0, data=dict(id=new_deploy.id)))
+
+        msg = deploys_new.rollback(deploy)
+        return jsonify(dict(rc=0, msg=msg))
+
+    elif action == "publish":
+        msg = deploys_new.publish(deploy)
+        return jsonify(dict(rc=0, msg=msg))
     elif action == "cancel":
         deploys.update(deploy, **dict(deploy_status=99))
         return jsonify(dict(rc=0, data=None))

@@ -60,6 +60,7 @@ function getListCallback(data1) {
 
 $(document).ready(function () {
     $("table tbody").empty();
+    var vars = getVars();
     get_deploys(getListCallback, vars["offset"], vars["limit"]);
 
     $("tbody").delegate(".rollback", "click", function () {
@@ -69,7 +70,8 @@ $(document).ready(function () {
             {"action": "rollback"},
             function (data) {
                 check_return(data);
-                var deploy_id = data["data"]["id"];
+                $('#totalMessage').text(data['msg']);
+                // var deploy_id = data["data"]["id"];
                 // window.location.assign('/deploys/' + deploy_id.toString() + '/progress')
             });
     }).delegate(".publish", "click", function () {
@@ -79,7 +81,9 @@ $(document).ready(function () {
             {"action": "publish"},
             function (data) {
                 check_return(data);
-                var deploy_id = data["data"]["id"];
+                $('#totalMessage').text(data['msg']);
+                // var deploy_id = data["data"]["id"];
+
                 // window.location.assign('/deploys/' + deploy_id.toString() + '/progress')
             });
     }).delegate(".cancel", "click", function () {

@@ -13,4 +13,8 @@ DB_PASS = "123"
 DB_NAME = "pydelo"
 
 # -- web app config --
-MAX_DEPLOY_HISTORY = 30 # deploy host上保存的最大历史版本数量
+MAX_DEPLOY_HISTORY = 30  # deploy host上保存的最大历史版本数量
+
+# GIT
+
+GIT_WORKING_FOLDER = "/Users/qinxin/projects/github/nevernet/pydelo/git-working/"
