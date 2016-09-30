@@ -73,7 +73,6 @@ git-repository/
 git-working
 www-test
 Would skip repository git-working/admin.witretail.cn
-shells/
 temp/
 uploads/
 Would skip repository www-test/admin.witretail.cn

@@ -5,7 +5,7 @@ from web.models.deploys import Deploys
 from web.models.projects import Projects
 from web.services.projects import projects as project_service
 
-from web.config import GIT_WORKING_FOLDER, SHELL_DIR
+from web.config import GIT_WORKING_FOLDER, SHELL_DIR, PROJECT_SERVERS
 import os
 import sh
 import hashlib
@@ -77,6 +77,10 @@ class DeploysServers(object):
 
         project = project_service.get(deploy.project_id)
         """:type: Projects"""
+
+        if project.prefixe not in PROJECT_SERVERS:
+            return "未找到项目配置"
+
         msg += self.add_to_git(project_dir, project.prefix)
 
         # delete template directory
@@ -89,19 +93,20 @@ class DeploysServers(object):
         # type: (string, string, Deploys) -> string
 
         target_directory = os.path.join(GIT_WORKING_FOLDER, prefix + "/")
-        shell_file = os.path.join(SHELL_DIR, "shells/%s_deploy.sh" % (prefix))
-        print shell_file
+        shell_file = os.path.join(SHELL_DIR, "shells/deploy.sh")
         shell = sh.Command(shell_file)
-        www_dir = "/Users/qinxin/projects/github/nevernet/pydelo/www-test/admin.witretail.cn"
-        print shell(os.path.join(project_dir, "*"), target_directory, www_dir)
 
-        pass
+        www_dir = PROJECT_SERVERS[prefix]["folder"]
+        shell(os.path.join(project_dir, "*"), target_directory, www_dir)
 
-    def rollback(self, deploy):
-        """
-        :type deploy: Deploys
-        :rtype: str
-        """
+    def rollback(self, prefix):
+        target_directory = os.path.join(GIT_WORKING_FOLDER, prefix + "/")
+        shell_file = os.path.join(SHELL_DIR, "shells/rollback.sh")
+        shell = sh.Command(shell_file)
+
+        www_dir = PROJECT_SERVERS[prefix]["folder"]
+        shell(target_directory, www_dir)
+
         pass
 
 
