@@ -104,7 +104,17 @@ function get_deploys(callback, offset, limit) {
 }
 
 function create_deploy(project_id, host_id, data, callback) {
-    $.post("/api/deploys?project_id=" + project_id + "&host_id=" + host_id, data, callback, "json");
+    // $.post("/api/deploys?project_id=" + project_id + "&host_id=" + host_id, data, callback, "json");
+    $.ajax({
+        url: "/api/deploys?project_id=" + project_id + "&host_id=" + host_id,
+        type: "POST",
+        data: data,
+        success: callback,
+        dataType: "json",
+        // contentType: 'multipart/form-data'
+        contentType: false,
+        processData: false
+    });
 }
 
 function update_deploy_by_id(id, data, callback) {

@@ -1,72 +1,101 @@
-$(document).ready(function() {
+function getVars() {
     vars = get_url_vars();
-    if (typeof(vars["offset"]) == "undefined"){
+    if (typeof(vars["offset"]) == "undefined") {
         vars["offset"] = 0
-    }else{
+    } else {
         vars["offset"] = parseInt(vars["offset"])
     }
-    if (typeof(vars["limit"]) == "undefined"){
+    if (typeof(vars["limit"]) == "undefined") {
         vars["limit"] = 10
-    }else{
+    } else {
         vars["limit"] = parseInt(vars["limit"])
     }
-    $("table tbody").empty();
-    get_deploys(function (data) {
-        check_return(data);
-        var data = data["data"];
-        $.each(data["deploys"], function(i, n) {
-            var tr = $("<tr></tr>");
-            tr.append($("<td></td>").text(n["user"]["name"]));
-            tr.append($("<td></td>").text(n["project"]["name"]));
-            tr.append($("<td></td>").text(n["branch"]));
-            tr.append($("<td></td>").text(n["version"]));
-            if (n["status"] == 1){
-                tr.append($("<td></td>").text("success"));
-            } else if(n["status"] == 0){
-                tr.append($("<td></td>").text("fail"));
-            } else {
-                tr.append($("<td></td>").text("running"));
-            }
-            tr.append($("<td></td>").text(n["updated_at"]));
-            if (n["status"] == 1){
-                tr.append($("<td></td>").append($("<a href=\"javascript:void(0)\" deploy_id="+n["id"].toString()+" class=\"rollback\">rollback</a>")));
-                //tr.append($("<td></td>").text("rollback to this version"));
-            } else if(n["status"] == 0){
-                tr.append($("<td></td>").append($("<a href=\"javascript:void(0)\" deploy_id="+n["id"].toString()+" class=\"redeploy\">redeploy</a>")));
-                //tr.append($("<td></td>").text("see log"));
-            } else {
-                tr.append($("<td></td>"));
-            }
-            $("table tbody").append(tr);
-        });
-        $(".pagination").empty();
-        for(var i=1, offset=0; offset < data["count"]; i++){
-            $(".pagination").append($("<li><a href=\"/deploys?offset="+offset+"&limit="+vars["limit"]+"\">"+i.toString()+"</a></li>"));
-            offset += vars["limit"];
+    return vars;
+}
+
+function getListCallback(data1) {
+    check_return(data1);
+    var data = data1["data"];
+    var keyStatus = "deploy_status";
+    $.each(data["deploys"], function (i, n) {
+        var tr = $("<tr></tr>");
+        tr.append($("<td></td>").text(n["id"]));
+        tr.append($("<td></td>").text(n["project"]["name"]));
+        tr.append($("<td></td>").text(n["package_name"]));
+        // tr.append($("<td></td>").text(n["branch"]));
+        // tr.append($("<td></td>").text(n["version"]));
+        if (n[keyStatus] == 1) {
+            tr.append($("<td></td>").text("已发布"));
+        } else if (n[keyStatus] == 0) {
+            tr.append($("<td></td>").text("已上传"));
+        } else if (n[keyStatus] == 99) {
+            tr.append($("<td></td>").text("已取消"));
         }
-    }, vars["offset"], vars["limit"]);
+        tr.append($("<td></td>").text(n["user"]["name"]));
+        tr.append($("<td></td>").text(n["updated_at"]));
+
+        var actionHtml = '';
+        if (n[keyStatus] == 1) {
+            actionHtml += "<a href=\"javascript:void(0)\" deploy_id=" + n["id"].toString() + " class=\"rollback\">回滚</a>&nbsp;";
+        } else if (n[keyStatus] == 0) {
+            actionHtml += "<a href=\"javascript:void(0)\" deploy_id=" + n["id"].toString() + " class=\"publish\">发布</a>&nbsp;";
+        }
+        if (n[keyStatus] != 99) {
+            actionHtml += "<a href=\"javascript:void(0)\" deploy_id=" + n["id"].toString() + " class=\"cancel\">删除</a>&nbsp;";
+        }
+
+        tr.append($("<td></td>").append(actionHtml));
+
+        $("table tbody").append(tr);
+    });
+
+
+    var vars = getVars();
+    $(".pagination").empty();
+    for (var i = 1, offset = 0; offset < data["count"]; i++) {
+        $(".pagination").append($("<li><a href=\"/deploys?offset=" + offset + "&limit=" + vars["limit"] + "\">" + i.toString() + "</a></li>"));
+        offset += vars["limit"];
+    }
+}
+
+$(document).ready(function () {
+    $("table tbody").empty();
+    get_deploys(getListCallback, vars["offset"], vars["limit"]);
+
     $("tbody").delegate(".rollback", "click", function () {
         var deploy_id = $(this).attr("deploy_id");
-        alert("running");
         update_deploy_by_id(
             deploy_id,
             {"action": "rollback"},
-            function(data){
+            function (data) {
                 check_return(data);
-                var deploy_id = data["data"]["id"]
-                window.location.assign('/deploys/'+deploy_id.toString()+'/progress')
+                var deploy_id = data["data"]["id"];
+                // window.location.assign('/deploys/' + deploy_id.toString() + '/progress')
             });
-    });
-    $("tbody").delegate(".redeploy", "click", function () {
+    }).delegate(".publish", "click", function () {
         var deploy_id = $(this).attr("deploy_id");
-        alert("running");
         update_deploy_by_id(
             deploy_id,
-            {"action": "redeploy"},
-            function(data){
+            {"action": "publish"},
+            function (data) {
                 check_return(data);
-                var deploy_id = data["data"]["id"]
-                window.location.assign('/deploys/'+deploy_id.toString()+'/progress')
+                var deploy_id = data["data"]["id"];
+                // window.location.assign('/deploys/' + deploy_id.toString() + '/progress')
+            });
+    }).delegate(".cancel", "click", function () {
+        var deploy_id = $(this).attr("deploy_id");
+        update_deploy_by_id(
+            deploy_id,
+            {"action": "cancel"},
+            function (data) {
+                check_return(data);
+                // var deploy_id = data["data"]["id"];
+                // window.location.assign('/deploys/' + deploy_id.toString() + '/progress')
+
+                if (data["rc"] == 0) {
+                    var vars = getVars();
+                    get_deploys(getListCallback, vars["offset"], vars["limit"]);
+                }
             });
     });
-})
+});

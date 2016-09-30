@@ -84,44 +84,66 @@ $(document).ready(function () {
     //     }
     // });
     // $("#branches").change(refresh_commits);
+
     $("#submit").click(function () {
-        var deploy_mode = $("input[name='deploy_mode']:checked").val();
-        var data;
-        if (deploy_mode == 0) {
-            data = {
-                "mode": 0,
-                "branch": $("#branches").val(),
-                "commit": $("#commits").val()
-            };
-        } else {
-            data = {
-                "mode": 1,
-                "tag": $("#tags").val()
-            };
+        var file = document.getElementById("package").files[0];
+        if (file === undefined) {
+            alert("请上传文件");
+            return;
         }
-        alert("running");
-        console.log(data);
+        var data = new FormData();
+        data.append('package', file);
+
+        var projectId = $("#projects").val();
+        projectId = isNaN(Number(projectId)) ? 0 : projectId;
+
+        if(projectId < 1) {
+            alert("请选择项目");
+            return;
+        }
+
+        // return;
+        // var deploy_mode = $("input[name='deploy_mode']:checked").val();
+        // var data = {};
+        // if (deploy_mode == 0) {
+        //     data = {
+        //         "mode": 0,
+        //         "branch": $("#branches").val(),
+        //         "commit": $("#commits").val()
+        //     };
+        // } else {
+        //     data = {
+        //         "mode": 1,
+        //         "tag": $("#tags").val()
+        //     };
+        // }
+        // alert("running");
+        // console.log(data);
         create_deploy(
-            $("#projects").val(),
-            $("#hosts").val(),
+            projectId,
+            // $("#hosts").val(),
+            0,
             data,
             function (data) {
                 check_return(data);
                 var id = data["data"]["id"];
-                window.location.assign('/deploys/' + id.toString() + '/progress')
+                window.location.href = "/deploys";
+                // window.location.assign('/deploys/' + id.toString() + '/progress')
             }
         );
     });
-    $("input[name='deploy_mode']").click(function () {
-        var deploy_mode = $("input[name='deploy_mode']:checked").val();
-        if (deploy_mode == 0) {
-            $(".deploy_branch_mode").show();
-            $(".deploy_tag_mode").hide();
-            refresh_branches();
-        } else {
-            $(".deploy_branch_mode").hide();
-            $(".deploy_tag_mode").show();
-            refresh_tags();
-        }
-    });
-})
+
+
+    // $("input[name='deploy_mode']").click(function () {
+    //     var deploy_mode = $("input[name='deploy_mode']:checked").val();
+    //     if (deploy_mode == 0) {
+    //         $(".deploy_branch_mode").show();
+    //         $(".deploy_tag_mode").hide();
+    //         refresh_branches();
+    //     } else {
+    //         $(".deploy_branch_mode").hide();
+    //         $(".deploy_tag_mode").show();
+    //         refresh_tags();
+    //     }
+    // });
+});

@@ -7,6 +7,10 @@ import time
 import random
 import string
 import sys
+import os
+import datetime
+
+from werkzeug.utils import secure_filename
 
 if sys.version_info > (3,):
     string.letters = string.ascii_letters
@@ -68,23 +72,51 @@ def api_deploys():
 @app.route("/api/deploys", methods=["POST"])
 @authorize
 def api_post_deploy():
+    if "package" not in request.files:
+        return jsonify(dict(rc=-1, msg="未上传文件"))
+
     project_id = request.args.get("project_id")
+    if project_id < 1:
+        return jsonify(dict(rc=-1, msg="未选择项目"))
+
+    savePath = "%s/uploads/%s/%s" % (os.getcwd(), datetime.datetime.today().strftime('%Y/%m/%d'), project_id)
+    if os.path.exists(savePath) is False:
+        os.makedirs(savePath, 755)
+
+    file = request.files["package"]
+    """ :type: werkzeug.datastructures.FileStorage"""
+    if file.filename == "":
+        return jsonify(dict(rc=-1, msg="未上传文件1"))
+
+    secureFilename = secure_filename(file.filename)
+    saveFile = os.path.join(savePath, secureFilename)
+    file.save(saveFile)
+
     host_id = request.args.get("host_id")
     mode = request.form.get("mode", type=int)
     branch = request.form.get("branch") if mode == 0 else ""
     tag = request.form.get("tag")
     commit = request.form.get("commit") if mode == 0 else tag
+    host_id = 0
+    mode = 0
+    branch = ""
+    tag = ""
+    commit = ""
+
     deploy = deploys.create(
         user_id=g.user.id,
+        package_name=secureFilename,
+        package_path=saveFile,
         project_id=project_id,
         host_id=host_id,
         mode=mode,
         status=2,
         branch=branch,
         version=commit,
-        softln_filename=time.strftime("%Y%m%d-%H%M%S") + "-" + commit,
+        softln_filename=time.strftime(
+            "%Y%m%d-%H%M%S") + "-" + commit,
     )
-    deploys.deploy(deploy)
+    # deploys.deploy(deploy)
     return jsonify(dict(rc=0, data=dict(id=deploy.id)))
 
 
@@ -117,8 +149,15 @@ def update_deploy_by_id(id):
             softln_filename=deploy.softln_filename)
         deploys.rollback(new_deploy)
         return jsonify(dict(rc=0, data=dict(id=new_deploy.id)))
+    elif action == "publish":
+
+        return jsonify(dict(rc=0, data=None))
+    elif action == "cancel":
+        deploys.update(deploy, **dict(deploy_status=99))
+        return jsonify(dict(rc=0, data=None))
     else:
-        raise Error(10000, msg=None)
+        return jsonify(dict(rc=-1, msg="action is not supported"))
+        # raise Error(10000, msg=None)
 
 
 @app.route("/api/deploys/<int:id>", methods=["GET"])
