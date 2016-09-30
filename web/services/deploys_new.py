@@ -5,7 +5,7 @@ from web.models.deploys import Deploys
 from web.models.projects import Projects
 from web.services.projects import projects as project_service
 
-from web.config import GIT_WORKING_FOLDER
+from web.config import GIT_WORKING_FOLDER, SHELL_DIR
 import os
 import sh
 import hashlib
@@ -73,10 +73,11 @@ class DeploysServers(object):
         # get files which md5 not matched
         not_match_files, files = self._check_md5(project_dir)
         if len(not_match_files) > 0:
-            msg = "\n".join(not_match_files)
+            msg += "\n".join(not_match_files)
 
         project = project_service.get(deploy.project_id)
         """:type: Projects"""
+        msg += self.add_to_git(project_dir, project.prefix)
 
         # delete template directory
         rm = sh.Command("rm")
@@ -84,13 +85,15 @@ class DeploysServers(object):
 
         return msg
 
-    def add_to_git(self, files, deploy):
-        # type: (list, Deploys) -> string
-        """
-        :param files:
-        :param deploy:
-        :return:
-        """
+    def add_to_git(self, project_dir, prefix):
+        # type: (string, string, Deploys) -> string
+
+        target_directory = os.path.join(GIT_WORKING_FOLDER, prefix + "/")
+        shell_file = os.path.join(SHELL_DIR, "shells/%s_deploy.sh" % (prefix))
+        print shell_file
+        shell = sh.Command(shell_file)
+        www_dir = "/Users/qinxin/projects/github/nevernet/pydelo/www-test/admin.witretail.cn"
+        print shell(os.path.join(project_dir, "*"), target_directory, www_dir)
 
         pass
 
@@ -107,35 +110,4 @@ deploys_new = DeploysServers()
 if __name__ == "__main__":
     temp_dir = "/Users/qinxin/projects/github/nevernet/pydelo/temp/2/"
     filename = "admin.witretail.cn.updates.201609101130.54818b6e.zip"
-
-    prefix = "admin.witretail.cn"
-
-    project_dir = os.path.join(temp_dir, filename[:-4])
-
-    # get files which md5 not matched
-    # not_match_files, files = deploys_new._check_md5(project_dir)
-    # if len(not_match_files) > 0:
-    #     msg = "\n".join(not_match_files)
-
-    project = project_service.get(2)
-    """:type: Projects"""
-    prefix = project.prefix
-
-    target_directory = os.path.join(GIT_WORKING_FOLDER, prefix + "/")
-    print target_directory
-
-    cp = sh.Command("cp")
-    msg = cp("-R", os.path.abspath(project_dir), target_directory)
-    # print msg
-
-    cd = sh.Command("cd")
-    cd(target_directory)
-    pwd = sh.Command("pwd")
-    print pwd()
-
-    git = sh.Command("git")
-    print git("add", ".")
-    print git("commit", "-am", "update")
-    print git("push", "origin", "master")
-
     pass
