@@ -78,10 +78,10 @@ class DeploysServers(object):
         project = project_service.get(deploy.project_id)
         """:type: Projects"""
 
-        if project.prefixe not in PROJECT_SERVERS:
+        if project.prefix not in PROJECT_SERVERS:
             return "未找到项目配置"
 
-        msg += self.add_to_git(project_dir, project.prefix)
+        msg += str(self.add_to_git(project_dir, project.prefix))
 
         # delete template directory
         rm = sh.Command("rm")
@@ -97,7 +97,7 @@ class DeploysServers(object):
         shell = sh.Command(shell_file)
 
         www_dir = PROJECT_SERVERS[prefix]["folder"]
-        shell(os.path.join(project_dir, "*"), target_directory, www_dir)
+        return shell(os.path.join(project_dir, "*"), target_directory, www_dir)
 
     def rollback(self, prefix):
         target_directory = os.path.join(GIT_WORKING_FOLDER, prefix + "/")
@@ -105,14 +105,7 @@ class DeploysServers(object):
         shell = sh.Command(shell_file)
 
         www_dir = PROJECT_SERVERS[prefix]["folder"]
-        shell(target_directory, www_dir)
-
-        pass
+        return shell(target_directory, www_dir)
 
 
 deploys_new = DeploysServers()
-
-if __name__ == "__main__":
-    temp_dir = "/Users/qinxin/projects/github/nevernet/pydelo/temp/2/"
-    filename = "admin.witretail.cn.updates.201609101130.54818b6e.zip"
-    pass

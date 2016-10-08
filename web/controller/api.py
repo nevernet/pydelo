@@ -10,6 +10,8 @@ import sys
 import os
 import datetime
 
+from web.models.projects import Projects
+from flask import g
 from werkzeug.utils import secure_filename
 
 if sys.version_info > (3,):
@@ -80,6 +82,17 @@ def api_post_deploy():
     if project_id < 1:
         return jsonify(dict(rc=-1, msg="未选择项目"))
 
+    project = projects.get(project_id)
+    """ :type: Projects"""
+    if project is None:
+        return jsonify(dict(rc=-1, msg="项目不存在"))
+
+    if project.users is None:
+        return jsonify(dict(rc=-1, msg="不具备该项目的权限[1]"))
+
+    if g.user.id != 1 and project.users[0].id != g.user.id:
+        return jsonify(dict(rc=-1, msg="不具备该项目的权限[2]"))
+
     savePath = "%s/uploads/%s/%s" % (os.getcwd(), datetime.datetime.today().strftime('%Y/%m/%d'), project_id)
     if os.path.exists(savePath) is False:
         os.makedirs(savePath, 0755)
@@ -94,6 +107,11 @@ def api_post_deploy():
 
     if secureFilename[-4:] != ".zip":
         return jsonify(dict(rc=-1, msg="文件类型必须为.zip"))
+
+    # 文件前缀检查，避免传错项目文件
+    print secureFilename[:-4], project.prefix
+    if secureFilename.startswith(project.prefix) == False:
+        return jsonify(dict(rc=-1, msg="项目文件前缀不符合，您可以传错文件了"))
 
     file.save(saveFile)
 
