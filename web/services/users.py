@@ -73,7 +73,8 @@ class UsersService(Base):
 
     def get_user_projects(self, user, **kargs):
         if user.role == user.ROLE["ADMIN"]:
-            return dict(projects=projects.all(kargs.get("offset"), kargs.get("limit"), kargs.get("order_by")),
+            return dict(projects=projects.all(kargs.get("offset"), kargs.get("limit"), kargs.get("order_by"),
+                                              kargs.get("desc")),
                         count=projects.count())
         else:
             return dict(projects=user.projects.all(),

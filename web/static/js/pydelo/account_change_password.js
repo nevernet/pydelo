@@ -1,12 +1,12 @@
-
-$(document).ready(function() {
+$(document).ready(function () {
     $("#submit").click(function () {
         account_change_password(
-            {"password" : $("#password").val()},
+            {"password": $("#password").val()},
             function (data) {
-                check_return(data);
-                window.location.assign('/')
+                check_return(data, function () {
+                    window.location.assign('/')
+                });
             }
         );
     });
-})
+});

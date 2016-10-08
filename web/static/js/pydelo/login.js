@@ -6,11 +6,12 @@ $(document).ready(function () {
                 "password": $("#password").val()
             },
             function (result) {
-                check_return(result);
-                var data = result["data"];
-                $.cookie('sign', data["sign"], {expires: 1, path: '/'});
-                window.location.assign('/')
+                check_return(result, function () {
+                    var data = result["data"];
+                    $.cookie('sign', data["sign"], {expires: 1, path: '/'});
+                    window.location.assign('/')
+                });
             }
         );
     });
-})
+});

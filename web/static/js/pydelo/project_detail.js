@@ -30,9 +30,9 @@ $(document).ready(function () {
                 "after_deploy": $("#after_deploy").val(),
             },
             function (data) {
-                check_return(data);
-                alert("OK");
-                //window.location.reload();
+                check_return(data, function (data) {
+                    window.location.assign('/projects')
+                });
             });
     });
 })

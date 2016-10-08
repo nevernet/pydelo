@@ -1,23 +1,29 @@
 $(document).ready(function () {
     vars = get_url_vars();
+
     get_user_projects(vars["users"], function (data) {
-        check_return(data);
-        var projects = [];
-        $.each(data["data"]["projects"], function () {
-            projects.push({"text": this["name"], "value": this["id"]})
+        check_return(data, function (data) {
+            var projects = [];
+            $.each(data["data"]["projects"], function () {
+                projects.push({"text": this["name"], "value": this["id"]})
+            });
+            $("#projects_selected").empty();
+            append_option_to_select(projects, $("#projects_selected"));
         });
-        $("#projects_selected").empty();
-        append_option_to_select(projects, $("#projects_selected"));
+
     });
+
     get_projects(function (data) {
-        check_return(data);
-        var users = [];
-        $.each(data["data"]["projects"], function () {
-            users.push({"text": this["name"], "value": this["id"]})
+        check_return(data, function (data) {
+            var users = [];
+            $.each(data["data"]["projects"], function () {
+                users.push({"text": this["name"], "value": this["id"]})
+            });
+            $("#projects").empty();
+            append_option_to_select(users, $("#projects"));
         });
-        $("#projects").empty();
-        append_option_to_select(users, $("#projects"));
     });
+
     $("#add_projects").click(function (e) {
         var selected = [];
         var to_add = [];
@@ -36,20 +42,16 @@ $(document).ready(function () {
             this.remove();
         });
     });
+
     $("#submit").click(function (e) {
         var selected = [];
         $.each($("#projects_selected option"), function () {
             selected.push(this.value);
         });
         update_user_projects(vars["users"], {"projects": selected}, function (data) {
-            // check_return(data);
-            if (data["rc"] != 0) {
-                alert(data["msg"]);
-                return false;
-            }
-
-            alert('操作成功');
-
+            check_return(data, function (data) {
+                alert('操作成功');
+            });
         });
     });
-})
+});

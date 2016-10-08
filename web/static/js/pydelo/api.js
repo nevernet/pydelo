@@ -28,9 +28,14 @@ function get_url_vars() {
     return vars;
 }
 
-function check_return(data) {
+function check_return(data, success) {
     if (data["rc"] != 0) {
         alert(data["msg"]);
+        return false;
+    }
+
+    if ($.isFunction(success)) {
+        success(data);
     }
 }
 
@@ -163,6 +168,16 @@ function update_project_by_id(id, data, callback) {
     });
 }
 
+function delete_project_by_id(id, data, callback) {
+    $.ajax({
+        url: "/api/projects/" + id.toString(),
+        type: "DELETE",
+        data: data,
+        success: callback,
+        dataType: "json"
+    });
+}
+
 function get_tags_by_id(project_id, callback) {
     $.get("/api/projects/" + project_id.toString() + "/tags", callback, "json");
 }
@@ -192,6 +207,16 @@ function create_user(data, callback) {
     $.ajax({
         url: "/api/users",
         type: "POST",
+        data: data,
+        success: callback,
+        dataType: "json"
+    });
+}
+
+function delete_user_by_id(id, data, callback) {
+    $.ajax({
+        url: "/api/users/" + id.toString(),
+        type: "DELETE",
         data: data,
         success: callback,
         dataType: "json"

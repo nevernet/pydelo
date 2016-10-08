@@ -61,11 +61,11 @@ def api_deploys():
     limit = request.args.get("limit", None, type=int)
     if g.user.role == g.user.ROLE["ADMIN"]:
         return jsonify(dict(rc=0,
-                            data=dict(deploys=deploys.find(offset, limit, order_by="updated_at", desc=True),
+                            data=dict(deploys=deploys.find(offset, limit, order_by="id", desc=True),
                                       count=deploys.count())))
     else:
         return jsonify(dict(rc=0,
-                            data=dict(deploys=deploys.find(offset, limit, order_by="updated_at", desc=True,
+                            data=dict(deploys=deploys.find(offset, limit, order_by="id", desc=True,
                                                            user_id=g.user.id),
                                       count=deploys.count(user_id=g.user.id))))
 
@@ -99,13 +99,15 @@ def api_post_deploy():
 
     host_id = request.args.get("host_id")
     mode = request.form.get("mode", type=int)
-    branch = request.form.get("branch") if mode == 0 else ""
     tag = request.form.get("tag")
+    branch = request.form.get("branch") if mode == 0 else ""
     commit = request.form.get("commit") if mode == 0 else tag
+    tag = ""
+
     host_id = 0
     mode = 0
     branch = ""
-    tag = ""
+
     commit = ""
 
     deploy = deploys.create(
@@ -191,7 +193,7 @@ def get_deploy_progress_by_id(id):
 def api_projects():
     offset = request.args.get("offset", None, type=int)
     limit = request.args.get("limit", None, type=int)
-    data = users.get_user_projects(g.user, offset=offset, limit=limit, order_by="name")
+    data = users.get_user_projects(g.user, offset=offset, limit=limit, order_by="id", desc=True)
     return jsonify(dict(rc=0, data=data))
 
 
@@ -212,6 +214,13 @@ def api_get_project_by_id(id):
 @authorize
 def api_update_project_by_id(id):
     projects.update(projects.get(id), **request.form.to_dict())
+    return jsonify(dict(rc=0))
+
+
+@app.route("/api/projects/<int:id>", methods=["DELETE"])
+@authorize
+def api_delete_project_by_id(id):
+    projects.delete(projects.get(id))
     return jsonify(dict(rc=0))
 
 
@@ -295,6 +304,15 @@ def api_users():
 @authorize
 def api_get_user_by_id(id):
     return jsonify(dict(rc=0, data=users.get(id)))
+
+
+@app.route("/api/users/<int:id>", methods=["DELETE"])
+@authorize
+def api_delete_user_by_id(id):
+    if int(id) == 1:
+        return jsonify(dict(rc=-1, msg="权限不够"))
+    users.delete(users.get(id))
+    return jsonify(dict(rc=0))
 
 
 @app.route("/api/users/<int:id>/hosts", methods=["GET"])

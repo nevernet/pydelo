@@ -14,8 +14,9 @@ $(document).ready(function () {
                 "after_deploy": $("#after_deploy").val(),
             },
             function (data) {
-                check_return(data);
-                window.location.assign('/projects')
+                check_return(data, function (data) {
+                    window.location.assign('/projects')
+                });
             });
     });
-})
+});
