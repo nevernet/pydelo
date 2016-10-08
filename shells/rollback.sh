@@ -11,7 +11,7 @@ cd $target_directory
 pwd
 
 echo "starting rollback"
-git reset --hard HEAD~
+git reset --hard HEAD~ # 这里可以改成指定的版本号
 git push -f origin master
 echo "ended rollback"
 
