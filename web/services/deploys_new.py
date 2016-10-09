@@ -71,7 +71,6 @@ class DeploysServers(object):
 
         # get files which md5 not matched
         not_match_files, files = self._check_md5(project_dir)
-        print "not match files:", not_match_files
         if len(not_match_files) > 0:
             msg += "\n".join(not_match_files)
 

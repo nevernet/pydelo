@@ -11,7 +11,6 @@ cp -R $project_dir/* $target_directory
 
 cd $target_directory
 pwd
-ls -al
 echo "chown"
 chown -R git:git $target_directory
 
@@ -34,7 +33,6 @@ HERE
 
 cd $www_dir
 pwd
-ls -al
 echo "starting to pull"
 # git -C $www_dir pull origin master
 git pull origin master
