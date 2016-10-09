@@ -118,7 +118,7 @@ class DeploysServers(object):
 
         www_dir = PROJECT_SERVERS[prefix]["folder"]
         git_working_directory = os.path.join(GIT_WORKING_FOLDER, PROJECT_SERVERS[prefix]["git_folder_name"] + "/")
-        return shell(os.path.join(project_dir, "*"), git_working_directory, www_dir)
+        return shell(project_dir, git_working_directory, www_dir)
 
     def rollback_to_git(self, prefix, specify_shell=None):
         # git_working_directory = os.path.join(GIT_WORKING_FOLDER, prefix + "/")

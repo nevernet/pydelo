@@ -7,15 +7,16 @@ echo $1
 echo $2
 echo $3
 
-cp -R $project_dir $target_directory
+cp -R $project_dir/* $target_directory
 
 cd $target_directory
+pwd
+ls -al
 echo "chown"
 chown -R git:git $target_directory
-pwd
 
 echo "switch user"
-su - git
+su - git <<HERE
 cd $target_directory
 pwd
 
@@ -29,10 +30,14 @@ echo "ended commit and push"
 exit
 echo "logout git user"
 
+HERE
+
 cd $www_dir
 pwd
-echo "starting to push"
-git -C $www_dir pull origin master
+ls -al
+echo "starting to pull"
+# git -C $www_dir pull origin master
+git pull origin master
 
 echo "ended to deploy"
 
