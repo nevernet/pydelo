@@ -13,6 +13,8 @@ from web.services.users import users
 from web.services.sessions import sessions
 
 from functools import wraps
+
+
 def authorize(func):
     @wraps(func)
     def decorator(*args, **kargs):
@@ -23,13 +25,15 @@ def authorize(func):
             if g.user is not None:
                 return func(*args, **kargs)
         return redirect(url_for('login', next=request.path))
+
     return decorator
 
-#login_manager = LoginManager()
-#login_manager.init_app(app)
+
+# login_manager = LoginManager()
+# login_manager.init_app(app)
 #
-#@login_manager.request_loader
-#def load_user(request):
+# @login_manager.request_loader
+# def load_user(request):
 #    apikey = request.args.get("apikey")
 #    if apikey:
 #        return users.first(apikey=apikey)
@@ -38,21 +42,24 @@ def authorize(func):
 #        return User.get_by_session(sign)
 #    return None
 #
-#login_manager.login_view = "/login"
+# login_manager.login_view = "/login"
 
 @app.route("/", methods=["GET"])
 @authorize
 def index():
     return redirect(url_for('deploys'))
 
+
 @app.route("/login", methods=["GET"])
 def login():
     return render_template("login.html")
+
 
 @app.route("/account/change_password", methods=["GET"])
 @authorize
 def change_password():
     return render_template("account_change_password.html")
+
 
 # @app.route("/login", methods=["POST"])
 # def to_login():

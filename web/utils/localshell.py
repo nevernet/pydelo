@@ -3,13 +3,12 @@
 __author__ = 'Rocky Peng'
 
 from subprocess import Popen, PIPE, CalledProcessError
-
 from web.utils.log import Logger
+
 logger = Logger("LocalShell")
 
 
 class LocalShell(object):
-
     @staticmethod
     def check_output(*args, **kargs):
         cmd = kargs.get("args") or args[0]
@@ -53,6 +52,5 @@ class LocalShell(object):
         logger.debug("stdout: %s" % stdout)
         logger.warn("stderr: %s" % stderr)
         if rc:
-            raise CalledProcessError(rc, cmd, stdout)
+            raise CalledProcessError(rc, cmd, stdout + "\n" + stderr)
         return rc
-

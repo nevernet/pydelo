@@ -4,9 +4,10 @@ __author__ = 'Rocky Peng'
 
 from web import db
 from web.utils.jsonencoder import JsonSerializer
+
+
 class RelUserHost():
     pass
-
 
 # class RelUserHost(JsonSerializer, db.Model):
 # 

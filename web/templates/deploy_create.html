@@ -3,73 +3,78 @@
     <script src="{{ url_for('static', filename='js/pydelo/deploy_create.js') }}"></script>
 {% endblock %}
 {% block content %}
-<div class="row">
-    <ol class="breadcrumb">
-        <li><a href="/deploys">Home</a></li>
-        <li class="active">Creation</li>
-    </ol>
-</div>
-<div class="row">
-    <!--form role="form" action="/deploys" method="GET"-->
-        <div class="row">
-            <div class="col-xs-2">
-                <label>project:</label>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-left">
+                <h3 class="panel-title" style="line-height: 30px;">创建发布</h3>
             </div>
-            <div class="col-xs-5">
-                <select class="form-control" id="projects" name="project_id">
-                </select>
+            <div class="pull-right">
             </div>
+            <div class="clearfix"></div>
         </div>
-        <div class="row">
-            <div class="col-xs-2">
-                <label>deploy mode:</label>
-            </div>
-            <div class="col-xs-5">
-                <div class="radio-inline">
-                    <input type="radio" name="deploy_mode" value="0" checked>Branch</input>
+        <div class="panel-body">
+
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label for="projects" class="col-lg-2">项目</label>
+                    <div class="col-lg-10">
+                        <select class="form-control" id="projects" name="project_id"></select>
+                    </div>
                 </div>
-                <div class="radio-inline">
-                    <input type="radio" name="deploy_mode" value="1">Tag</input>
+
+                <div class="form-group">
+                    <label for="projects" class="col-lg-2">更新包</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" id="package" type="file"/>
+                    </div>
                 </div>
+
+                {#                <div class="form-group">#}
+                {#                    <label for="" class="col-lg-2">deploy mode</label>#}
+                {#                    <div class="col-lg-10">#}
+                {#                        <div class="radio-inline">#}
+                {#                            <input type="radio" name="deploy_mode" value="0" checked>Branch</input>#}
+                {#                        </div>#}
+                {#                        <div class="radio-inline">#}
+                {#                            <input type="radio" name="deploy_mode" value="1">Tag</input>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                </div>#}
+                {##}
+                {#                <div class="form-group deploy_branch_mode">#}
+                {#                    <label for="" class="col-lg-2">repo branch</label>#}
+                {#                    <div class="col-lg-10">#}
+                {#                        <select class="form-control" name="branch" id="branches"></select>#}
+                {#                    </div>#}
+                {#                </div>#}
+                {##}
+                {#                <div class="form-group deploy_branch_mode">#}
+                {#                    <label for="" class="col-lg-2">repo commits</label>#}
+                {#                    <div class="col-lg-10">#}
+                {#                        <select class="form-control" name="commit" id="commits"></select>#}
+                {#                    </div>#}
+                {#                </div>#}
+                {##}
+                {#                <div class="form-group deploy_tag_mode">#}
+                {#                    <label for="" class="col-lg-2">repo tags</label>#}
+                {#                    <div class="col-lg-10">#}
+                {#                        <select class="form-control" name="tag" id="tags"></select>#}
+                {#                    </div>#}
+                {#                </div>#}
+                {##}
+                {#                <div class="form-group deploy_tag_mode">#}
+                {#                    <label for="" class="col-lg-2">host</label>#}
+                {#                    <div class="col-lg-10">#}
+                {#                        <select class="form-control" name="host_id" id="hosts"></select>#}
+                {#                    </div>#}
+                {#                </div>#}
+
             </div>
         </div>
-        <div class="row deploy_branch_mode">
-            <div class="col-xs-2">
-                <label>repo branch:</label>
-            </div>
-            <div class="col-xs-5">
-                <select class="form-control" name="branch" id="branches">
-                </select>
-            </div>
+        <div class="panel-footer">
+            <button id="submit" class="btn btn-primary">上传</button>
+            <a href="/deploys" class="btn btn-default">返回</a>
         </div>
-        <div class="row deploy_branch_mode">
-            <div class="col-xs-2">
-                <label>repo commits:</label>
-            </div>
-            <div class="col-xs-5">
-                <select class="form-control" name="commit" id="commits">
-                </select>
-            </div>
-        </div>
-        <div class="row deploy_tag_mode" style="display: none;">
-            <div class="col-xs-2">
-                <label>repo tags:</label>
-            </div>
-            <div class="col-xs-5">
-                <select class="form-control" name="tag" id="tags">
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-2">
-                <label>host:</label>
-            </div>
-            <div class="col-xs-5">
-                <select class="form-control" name="host_id" id="hosts">
-                </select>
-            </div>
-        </div>
-        <button id="submit" class="btn btn-primary">Save</button>
-    </form>
-</div>
+    </div>
 {% endblock %}

@@ -3,55 +3,56 @@
     <script src="{{ url_for('static', filename='js/pydelo/host_create.js') }}"></script>
 {% endblock %}
 {% block content %}
-<div class="row">
-    <ol class="breadcrumb">
-        <li><a href="/hosts">Home</a></li>
-        <li class="active">Creation</li>
-    </ol>
-</div>
-<div class="row">
-    <!--form role="form" action="/host/creation" method="post"-->
-        <div class="row">
-            <div class="col-xs-1">
-                <label>name:</label>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-left">
+                <h3 class="panel-title" style="line-height: 30px;">创建主机</h3>
             </div>
-            <div class="col-xs-5">
-                <input class="form-control" type="text" id="name" placeholder="host name">
+            <div class="pull-right">
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body">
+
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label for="name" class="col-lg-2">name</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" type="text" id="name" placeholder="host name">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="repo_url" class="col-lg-2">ssh host</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" type="text" id="ssh_host">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="col-lg-2">ssh port</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" type="text" id="ssh_port">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="col-lg-2">ssh user</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" type="text" id="ssh_user">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="col-lg-2">ssh password</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" type="text" id="ssh_pass">
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-1">
-                <label>ssh host:</label>
-            </div>
-            <div class="col-xs-5">
-                <input class="form-control" type="text" id="ssh_host">
-            </div>
+        <div class="panel-footer">
+            <button id="submit" class="btn btn-primary">保存</button>
         </div>
-        <div class="row">
-            <div class="col-xs-1">
-                <label>ssh port:</label>
-            </div>
-            <div class="col-xs-5">
-                <input class="form-control" type="text" id="ssh_port">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-1">
-                <label>ssh user:</label>
-            </div>
-            <div class="col-xs-5">
-                <input class="form-control" type="text" id="ssh_user">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-1">
-                <label>ssh password:</label>
-            </div>
-            <div class="col-xs-5">
-                <input class="form-control" type="text" id="ssh_pass">
-            </div>
-        </div>
-        <button id="submit" class="btn btn-primary">Save</button>
-    </form>
-</div>
+    </div>
 {% endblock %}

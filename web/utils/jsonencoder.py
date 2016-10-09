@@ -1,4 +1,7 @@
+# -*- coding:utf-8 -*-
+
 from datetime import datetime
+
 from flask.json import JSONEncoder as BaseJSONEncoder
 
 

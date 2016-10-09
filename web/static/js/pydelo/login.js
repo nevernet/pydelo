@@ -1,14 +1,17 @@
-
-$(document).ready(function() {
+$(document).ready(function () {
     $("#submit").click(function () {
         login(
-            {"username": $("#username").val(),
-             "password" : $("#password").val()},
-            function (data) {
-                check_return(data);
-                $.cookie('sign', data["data"], { expires: 1, path: '/' });
-                window.location.assign('/')
+            {
+                "username": $("#username").val(),
+                "password": $("#password").val()
+            },
+            function (result) {
+                check_return(result, function () {
+                    var data = result["data"];
+                    $.cookie('sign', data["sign"], {expires: 1, path: '/'});
+                    window.location.assign('/')
+                });
             }
         );
     });
-})
+});

@@ -12,7 +12,7 @@ class Base(object):
         db.session.add(model)
         db.session.commit()
         return model
-    
+
     def find(self, offset=None, limit=None, order_by=None, desc=False, **kargs):
         query = self.__model__.query.filter_by(**kargs)
         if order_by is not None:
@@ -55,7 +55,7 @@ class Base(object):
         return self.save(self.__model__(**kargs))
 
     def update(self, model, **kargs):
-        for k,v in kargs.items():
+        for k, v in kargs.items():
             setattr(model, k, v)
         self.save(model)
         return model

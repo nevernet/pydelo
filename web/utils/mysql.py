@@ -2,6 +2,7 @@ import MySQLdb
 import pymysql
 
 from log import Logger
+
 logger = Logger("MYSQL")
 
 import config
@@ -28,9 +29,10 @@ class PyMySQL(object):
             db=self.db,
             charset="utf8")
 
+
 sql_conn = PyMySQL(
-        host=config.DB_HOST,
-        user=config.DB_USER,
-        passwd=config.DB_PASS,
-        port=config.DB_PORT,
-        db=config.DB_NAME)
+    host=config.DB_HOST,
+    user=config.DB_USER,
+    passwd=config.DB_PASS,
+    port=config.DB_PORT,
+    db=config.DB_NAME)
