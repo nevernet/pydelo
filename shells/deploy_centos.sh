@@ -3,9 +3,9 @@
 project_dir=$1
 target_directory=$2
 www_dir=$3
-echo $1
-echo $2
-echo $3
+echo "project dir:", $1
+echo "target dir:", $2
+echo "www dir:", $3
 
 cp -R $project_dir/* $target_directory
 
