@@ -26,7 +26,6 @@ class DeploysServers(object):
             i = 0
             for line in f:
                 line = line.strip()
-                print line
                 if i == 0:
                     title = line
                 if i > 2:
@@ -72,6 +71,7 @@ class DeploysServers(object):
 
         # get files which md5 not matched
         not_match_files, files = self._check_md5(project_dir)
+        print "not match files:", not_match_files
         if len(not_match_files) > 0:
             msg += "\n".join(not_match_files)
 
