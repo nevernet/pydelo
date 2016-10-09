@@ -8,7 +8,7 @@ echo $3
 
 
 echo "switch user"
-su - git
+su - git <<HERE
 cd $target_directory
 pwd
 
@@ -19,6 +19,8 @@ echo "ended rollback"
 
 exit
 echo "logout git user"
+
+HERE
 
 echo "starting to push"
 cd $www_dir

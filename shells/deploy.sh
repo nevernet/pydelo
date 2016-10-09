@@ -7,11 +7,10 @@ echo $1
 echo $2
 echo $3
 
-cp -R $project_dir $target_directory
+cp -R $project_dir/* $target_directory
 
 cd $target_directory
 pwd
-
 
 echo "starting to git commit and push to central repository"
 git remote -v
