@@ -16,7 +16,12 @@ git push -f origin master
 echo "ended rollback"
 
 echo "starting to push"
-git -C $www_dir pull origin master
+cd $www_dir
+pwd
+#git -C $www_dir pull origin master
+git fetch origin
+git reset --hard origin/master
+git clean -f -d
 echo "ended to deploy"
 
 

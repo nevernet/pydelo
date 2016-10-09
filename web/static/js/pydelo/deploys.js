@@ -17,6 +17,7 @@ function getListCallback(data1) {
     check_return(data1, function () {
         var data = data1["data"];
         var keyStatus = "deploy_status";
+        var isRollbackAdded = false;
         $.each(data["deploys"], function (i, n) {
             var tr = $("<tr></tr>");
             tr.append($("<td></td>").text(n["id"]));
@@ -38,13 +39,15 @@ function getListCallback(data1) {
             tr.append($("<td></td>").text(n["updated_at"]));
 
             var actionHtml = '';
-            if (n[keyStatus] == 1) {
+            if (n[keyStatus] == 1 && i == 0) {
                 actionHtml += "<a href=\"javascript:void(0)\" deploy_id=" + n["id"].toString() + " class=\"rollback\">回滚</a>&nbsp;";
-            } else if (n[keyStatus] == 0) {
+                isRollbackAdded = true;
+            } else if (n[keyStatus] == 0 && i == 0) {
                 actionHtml += "<a href=\"javascript:void(0)\" deploy_id=" + n["id"].toString() + " class=\"publish\">发布</a>&nbsp;";
             } else if (n[keyStatus] == 2) {
-                
+
             }
+
             if (n[keyStatus] != 99) {
                 actionHtml += "<a href=\"javascript:void(0)\" deploy_id=" + n["id"].toString() + " class=\"cancel\">删除</a>&nbsp;";
             }
