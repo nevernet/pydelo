@@ -19,9 +19,7 @@ su - git
 cd $target_directory
 pwd
 
-echo "starting to git commint and push to centeral repository"
-
-git stash
+echo "starting to git commit and push to central repository"
 git remote -v
 git add .
 git commit -am 'update'
@@ -32,6 +30,7 @@ exit
 echo "logout git user"
 
 cd $www_dir
+pwd
 echo "starting to push"
 git -C $www_dir pull origin master
 
