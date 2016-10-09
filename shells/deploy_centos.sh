@@ -10,10 +10,17 @@ echo $3
 cp -R $project_dir $target_directory
 
 cd $target_directory
+echo "chown"
+chown -R git:git $target_directory
 pwd
 
+echo "switch user"
+su - git
+cd $target_directory
+pwd
 
 echo "starting to git commint and push to centeral repository"
+
 git stash
 git remote -v
 git add .
@@ -21,6 +28,10 @@ git commit -am 'update'
 git push origin master
 echo "ended commit and push"
 
+exit
+echo "logout git user"
+
+cd $www_dir
 echo "starting to push"
 git -C $www_dir pull origin master
 

@@ -30,6 +30,8 @@ function getListCallback(data1) {
                 tr.append($("<td></td>").text("已上传"));
             } else if (n[keyStatus] == 99) {
                 tr.append($("<td></td>").text("已取消"));
+            } else if (n[keyStatus] == 2) {
+                tr.append($("<td></td>").text("已回滚"));
             }
             tr.append($("<td></td>").text(n["user"]["name"]));
             tr.append($("<td></td>").text(n["created_at"]));
@@ -40,6 +42,8 @@ function getListCallback(data1) {
                 actionHtml += "<a href=\"javascript:void(0)\" deploy_id=" + n["id"].toString() + " class=\"rollback\">回滚</a>&nbsp;";
             } else if (n[keyStatus] == 0) {
                 actionHtml += "<a href=\"javascript:void(0)\" deploy_id=" + n["id"].toString() + " class=\"publish\">发布</a>&nbsp;";
+            } else if (n[keyStatus] == 2) {
+                
             }
             if (n[keyStatus] != 99) {
                 actionHtml += "<a href=\"javascript:void(0)\" deploy_id=" + n["id"].toString() + " class=\"cancel\">删除</a>&nbsp;";
@@ -60,10 +64,14 @@ function getListCallback(data1) {
     });
 }
 
-$(document).ready(function () {
+function getList() {
     $("table tbody").empty();
     var vars = getVars();
     get_deploys(getListCallback, vars["offset"], vars["limit"]);
+}
+
+$(document).ready(function () {
+    getList();
 
     $("tbody").delegate(".rollback", "click", function () {
         var deploy_id = $(this).attr("deploy_id");
@@ -71,8 +79,9 @@ $(document).ready(function () {
             deploy_id,
             {"action": "rollback"},
             function (data) {
-                check_return(data, function () {
+                check_return(data, function (data) {
                     $('#totalMessage').text(data['msg']);
+                    getList();
                 });
             });
     }).delegate(".publish", "click", function () {
@@ -81,7 +90,8 @@ $(document).ready(function () {
             deploy_id,
             {"action": "publish"},
             function (data) {
-                check_return(data, function () {
+                check_return(data, function (data) {
+                    getList();
                     $('#totalMessage').text(data['msg']);
                 });
             });
@@ -91,8 +101,9 @@ $(document).ready(function () {
             deploy_id,
             {"action": "cancel"},
             function (data) {
-                check_return(data, function () {
-                    self.location.reload();
+                check_return(data, function (data) {
+                    getList();
+                    // self.location.reload();
                 });
             });
     });

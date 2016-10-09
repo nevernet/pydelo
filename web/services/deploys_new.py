@@ -5,7 +5,7 @@ from web.models.deploys import Deploys
 from web.models.projects import Projects
 from web.services.projects import projects as project_service
 
-from web.config import GIT_WORKING_FOLDER, SHELL_DIR, PROJECT_SERVERS
+from web.config import GIT_WORKING_FOLDER, SHELL_DIR, SHELL_DIR_DEPLOY, SHELL_DIR_ROLLBACK, PROJECT_SERVERS
 import os
 import sh
 import hashlib
@@ -89,23 +89,45 @@ class DeploysServers(object):
 
         return msg
 
-    def add_to_git(self, project_dir, prefix):
+    def rollback(self, deploy):
+        """
+                :type deploy: Deploys
+                :rtype: str
+                """
+
+        msg = ""
+        current_path = os.getcwd()
+
+        project = project_service.get(deploy.project_id)
+        """:type: Projects"""
+
+        if project.prefix not in PROJECT_SERVERS:
+            return "未找到项目配置"
+
+        msg += str(self.rollback_to_git(project.prefix))
+
+        return msg
+
+    def add_to_git(self, project_dir, prefix, specify_shell=None):
         # type: (string, string, Deploys) -> string
 
-        target_directory = os.path.join(GIT_WORKING_FOLDER, prefix + "/")
-        shell_file = os.path.join(SHELL_DIR, "shells/deploy.sh")
+        # git_working_directory = os.path.join(GIT_WORKING_FOLDER, prefix + "/")
+
+        shell_file = specify_shell if specify_shell is not None else SHELL_DIR_DEPLOY
         shell = sh.Command(shell_file)
 
         www_dir = PROJECT_SERVERS[prefix]["folder"]
-        return shell(os.path.join(project_dir, "*"), target_directory, www_dir)
+        git_working_directory = os.path.join(GIT_WORKING_FOLDER, PROJECT_SERVERS[prefix]["git_folder_name"] + "/")
+        return shell(os.path.join(project_dir, "*"), git_working_directory, www_dir)
 
-    def rollback(self, prefix):
-        target_directory = os.path.join(GIT_WORKING_FOLDER, prefix + "/")
-        shell_file = os.path.join(SHELL_DIR, "shells/rollback.sh")
+    def rollback_to_git(self, prefix, specify_shell=None):
+        # git_working_directory = os.path.join(GIT_WORKING_FOLDER, prefix + "/")
+        shell_file = specify_shell if specify_shell is not None else SHELL_DIR_ROLLBACK
         shell = sh.Command(shell_file)
 
         www_dir = PROJECT_SERVERS[prefix]["folder"]
-        return shell(target_directory, www_dir)
+        git_working_directory = os.path.join(GIT_WORKING_FOLDER, PROJECT_SERVERS[prefix]["git_folder_name"] + "/")
+        return shell(git_working_directory, www_dir)
 
 
 deploys_new = DeploysServers()

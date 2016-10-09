@@ -177,10 +177,12 @@ def update_deploy_by_id(id):
         # return jsonify(dict(rc=0, data=dict(id=new_deploy.id)))
 
         msg = deploys_new.rollback(deploy)
+        deploys.update(deploy, **dict(deploy_status=2))
         return jsonify(dict(rc=0, msg=msg))
 
     elif action == "publish":
         msg = deploys_new.publish(deploy)
+        deploys.update(deploy, **dict(deploy_status=1))
         return jsonify(dict(rc=0, msg=msg))
     elif action == "cancel":
         deploys.update(deploy, **dict(deploy_status=99))
