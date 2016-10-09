@@ -11,6 +11,7 @@ import os
 import datetime
 
 from web.models.projects import Projects
+from web.models.deploys import Deploys
 from flask import g
 from werkzeug.utils import secure_filename
 
@@ -61,15 +62,57 @@ def api_user_login():
 def api_deploys():
     offset = request.args.get("offset", None, type=int)
     limit = request.args.get("limit", None, type=int)
+
+    data = {}
+    count = 0
+
     if g.user.role == g.user.ROLE["ADMIN"]:
-        return jsonify(dict(rc=0,
-                            data=dict(deploys=deploys.find(offset, limit, order_by="id", desc=True),
-                                      count=deploys.count())))
+        data = deploys.find(offset, limit, order_by="id", desc=True)
+        count = deploys.count()
+        # return jsonify(dict(rc=0,
+        #                     data=dict(deploys=data,
+        #                               count=count)))
     else:
-        return jsonify(dict(rc=0,
-                            data=dict(deploys=deploys.find(offset, limit, order_by="id", desc=True,
-                                                           user_id=g.user.id),
-                                      count=deploys.count(user_id=g.user.id))))
+        data = deploys.find(offset, limit, order_by="id", desc=True,
+                            user_id=g.user.id)
+        count = deploys.count(user_id=g.user.id)
+
+    new_data = []
+    for p in data:
+        """ :type: Deploys"""
+
+        p1 = {}
+        for k in dict(p.__dict__).keys():
+            if k.startswith("_") == True:
+                continue
+            if k != "package_path" and k != "project" and k != "user":
+                p1[k] = getattr(p, k)
+
+        p1["updated_at"] = p1["updated_at"].strftime("%Y-%m-%d %H:%M:%S")
+        p1["created_at"] = p1["created_at"].strftime("%Y-%m-%d %H:%M:%S")
+
+        project = {
+            "name": p.project.name,
+        }
+        user = {
+            "name": p.user.name,
+        }
+        p1["project"] = project
+        p1["user"] = user
+        new_data.append(p1)
+
+        # keys = dict(p.user.__dict__).keys()
+        # # print keys
+        # for k in keys:
+        #     print k, k.startswith("_")
+        #     if k.startswith("_") == True:
+        #         continue
+        #     if k != "name":
+        #         del p.user.__dict__[k]
+
+    return jsonify(dict(rc=0,
+                        data=dict(deploys=new_data,
+                                  count=count)))
 
 
 @app.route("/api/deploys", methods=["POST"])
