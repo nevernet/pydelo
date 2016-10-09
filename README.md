@@ -7,8 +7,53 @@ Pydelo - A Deploy Tool
 * deploy
 此部分做代码的发布动作，通过rsync将代码同步到远端机器的指定目录，在代码的同步前后也可以分别做一些shell操作，如相关服务的stop、start，某些清理工作等。
 
-Requirements
-------------
+前期环境配置
+------
+
+* git中心仓库，工作目录，项目目录配置
+
+```
+# 创建用户：
+groupadd www
+useradd -g www www
+
+su - git # 切换到git用户
+mkdir git-repository # 中心仓库
+cd git-repository
+mkdir test.git
+cd test.git
+git init --bare  # 创建bare仓库
+
+cd ~
+
+# 创建git 工作目录
+mkdir git-working
+cd git-working
+mkdir test-project #创建测试项目
+cd test-project
+git init
+git remote add origin /home/git/git-repository/test.git
+touch README.md
+git add . 
+git commit -am 'init'
+git push origin master
+
+exit #  退出git用户
+
+# 切换到项目实际目录地址, 假定项目网址是api.test.com
+cd /opt/www
+mkdir api.test.com
+cd api.test.com
+git init
+git remote add origin /home/git/git-repository/test.git
+git pull origin master
+```
+
+* 修改web/config-example.py的配置
+> 把config-example.py修改成config.py然后在修改
+
+2. Requirements
+---------------
 
 * Bash(git, rsync, ssh, sshpass)
 * MySQL
@@ -47,7 +92,7 @@ Usage
 
 Discussing
 ----------
-- email: pmq2008@gmail.com
+- email: ysixin@gmail.com
 
 
 Todo
