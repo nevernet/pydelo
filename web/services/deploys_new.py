@@ -34,6 +34,9 @@ class DeploysServers(object):
                 i += 1
         for key in files.keys():
             p = os.path.join(projectDir, key)
+            if files.has_key(key) == False:
+                print "key is not in files:", files, key
+                continue
             md5Str = files[key]
 
             if md5Str != self.md5_checksum(p):
