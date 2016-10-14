@@ -30,6 +30,9 @@ class DeploysServers(object):
                     title = line
                 if i > 2:
                     l = line.split("\t")
+                    if len(l) != 2:
+                        print line
+                        continue
                     files[l[0]] = l[1]
                 i += 1
         for key in files.keys():
