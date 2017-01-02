@@ -12,6 +12,7 @@ import hashlib
 
 
 class DeploysServers(object):
+
     def _check_md5(self, projectDir):
         # type: (str) -> list, list
         """
@@ -122,7 +123,8 @@ class DeploysServers(object):
         shell = sh.Command(shell_file)
 
         www_dir = PROJECT_SERVERS[prefix]["folder"]
-        git_working_directory = os.path.join(GIT_WORKING_FOLDER, PROJECT_SERVERS[prefix]["git_folder_name"] + "/")
+        git_working_directory = os.path.join(
+            GIT_WORKING_FOLDER, PROJECT_SERVERS[prefix]["git_folder_name"] + "/")
         return shell(project_dir, git_working_directory, www_dir)
 
     def rollback_to_git(self, prefix, specify_shell=None):
@@ -131,7 +133,8 @@ class DeploysServers(object):
         shell = sh.Command(shell_file)
 
         www_dir = PROJECT_SERVERS[prefix]["folder"]
-        git_working_directory = os.path.join(GIT_WORKING_FOLDER, PROJECT_SERVERS[prefix]["git_folder_name"] + "/")
+        git_working_directory = os.path.join(
+            GIT_WORKING_FOLDER, PROJECT_SERVERS[prefix]["git_folder_name"] + "/")
         return shell(git_working_directory, www_dir)
 
 

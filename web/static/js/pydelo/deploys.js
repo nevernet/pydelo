@@ -39,17 +39,21 @@ function getListCallback(data1) {
             tr.append($("<td></td>").text(n["updated_at"]));
 
             var actionHtml = '';
+            cls = ' class="btn btn-primary btn-flat btn-sm" ';
             if (n[keyStatus] == 1 && i == 0) {
-                actionHtml += "<a href=\"javascript:void(0)\" deploy_id=" + n["id"].toString() + " class=\"rollback\">回滚</a>&nbsp;";
+                cls = ' class="btn btn-danger btn-flat btn-sm rollback" ';
+                actionHtml += "<a href=\"javascript:void(0)\" " +cls+" deploy_id=" + n["id"].toString() + ">回滚</a>&nbsp;";
                 isRollbackAdded = true;
             } else if (n[keyStatus] == 0 && i == 0) {
-                actionHtml += "<a href=\"javascript:void(0)\" deploy_id=" + n["id"].toString() + " class=\"publish\">发布</a>&nbsp;";
+                cls = ' class="btn btn-primary btn-flat btn-sm publish" ';
+                actionHtml += "<a href=\"javascript:void(0)\" "+cls+" deploy_id=" + n["id"].toString() + ">发布</a>&nbsp;";
             } else if (n[keyStatus] == 2) {
 
             }
 
             if (n[keyStatus] != 99) {
-                actionHtml += "<a href=\"javascript:void(0)\" deploy_id=" + n["id"].toString() + " class=\"cancel\">删除</a>&nbsp;";
+                cls = ' class="btn btn-warning btn-flat btn-sm cancel" ';
+                actionHtml += "<a href=\"javascript:void(0)\" "+cls+" deploy_id=" + n["id"].toString() + ">删除</a>&nbsp;";
             }
 
             tr.append($("<td></td>").append(actionHtml));

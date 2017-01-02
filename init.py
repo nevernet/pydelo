@@ -1,13 +1,15 @@
 # -*- coding:utf-8 -*-
 
-import random, string
+import random
+import string
 from hashlib import md5
 from web.services.users import users
 from web.services.projects import projects
 
 users.create(name="root",
              password=md5("123456".encode("utf-8")).hexdigest().upper(),
-             apikey=''.join(random.choice(string.letters + string.digits) for _ in range(32)),
+             apikey=''.join(random.choice(string.letters + string.digits)
+                            for _ in range(32)),
              role=1)
 users.create(name="demo",
              password=md5("123456".encode("utf-8")).hexdigest().upper(),

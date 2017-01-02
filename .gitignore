@@ -72,7 +72,6 @@ target/
 git-repository/
 git-working
 www-test
-Would skip repository git-working/admin.witretail.cn
 temp/
 uploads/
-Would skip repository www-test/admin.witretail.cn
+tags
