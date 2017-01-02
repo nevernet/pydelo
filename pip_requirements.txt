@@ -5,3 +5,4 @@ flask-sqlalchemy==2.1
 paramiko==1.16.0
 pymysql==0.7.2
 sh=1.11
+aliyun-python-sdk-cdn=2.3.1
