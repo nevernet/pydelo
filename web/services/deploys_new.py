@@ -93,6 +93,17 @@ class DeploysServers(object):
         rm = sh.Command("rm")
         rm("-rf", project_dir)
 
+        print "deploy.project.after_deploy:", deploy.project.after_deploy
+        if deploy.project.after_deploy != "":
+            shell = "%s/shells/projects/%s" % (current_path, deploy.project.after_deploy)
+            if os.path.exists(shell):
+                os.chmod(shell, 0o777)
+                after_deploy = sh.Command(shell)
+                msg += str(after_deploy(current_path))
+                print "execute after delploy shell:",
+            else:
+                print "%s" % shell, " shell file does not exist"
+
         return msg
 
     def rollback(self, deploy):

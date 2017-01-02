@@ -12,17 +12,9 @@ import datetime
 
 from web.models.projects import Projects
 from web.models.deploys import Deploys
-from flask import g
 from werkzeug.utils import secure_filename
-
-if sys.version_info > (3,):
-    string.letters = string.ascii_letters
 from hashlib import md5
-
 from web.utils.log import Logger
-
-logger = Logger("API")
-
 from web import app
 from web.services.users import users
 from web.services.hosts import hosts
@@ -34,6 +26,9 @@ from .login import authorize
 
 from flask import request, jsonify, g
 
+if sys.version_info > (3,):
+    string.letters = string.ascii_letters
+logger = Logger("API")
 
 @app.errorhandler(Error)
 def error(err):

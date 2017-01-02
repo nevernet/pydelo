@@ -75,3 +75,5 @@ www-test
 temp/
 uploads/
 tags
+shells/projects/*.py
+shells/projects/*.sh
